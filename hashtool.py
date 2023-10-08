@@ -29,7 +29,7 @@ while user_input not in range(1, 4):
     user_input = int(input(colorama.Fore.BLUE + "Enter your choice (between 1, 2, 3, 4): " + colorama.Fore.RESET))
     
 def hash_type_detetor():
-    hash = input('please input your hash to decode: ')
+    hash = input(colorama.Fore.CYAN + 'please input your hash to decode: '+ colorama.Fore.RESET)
     
 
     digested_hash = len(hash)/2
@@ -113,8 +113,8 @@ def hash_type_detetor():
         hash_type = None
 
 def hash_generator():
-    user_hash_kind = input(f'please select your hash between=>\n(sha3_512, sha3_256, sha3_224, sha512, sha224, sha1, blake2s, blake2b, sha256, sha384, sha3_384, md5)')
-    user_text = input('please input your text to hash : ')
+    user_hash_kind = input(colorama.Fore.YELLOW+f'please select your hash type between=>\n(sha3_512, sha3_256, sha3_224, sha512, sha224, sha1, blake2s, blake2b, sha256, sha384, sha3_384, md5) : '+ colorama.Fore.RESET)
+    user_text = input(colorama.Fore.LIGHTGREEN_EX+'please input your text to hash : '+colorama.Fore.RESET)
     if user_hash_kind == 'sha3_512':
         hash_type = hashlib.sha3_512()
         hash_type.update(user_text.encode())
@@ -164,7 +164,7 @@ def hash_generator():
         hash_type.update(user_text.encode())
         print(hash_type.hexdigest())
     else:
-        print('enter exactly hash type next time')
+        print('enter exactly hash type next time .')
 
 def hash_cracker():
     wordlist = input('please input your wordlist path: ')
