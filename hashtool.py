@@ -221,35 +221,12 @@ def hash_cracker():
 
         hash_type = hashlib.sha512()
 
-    elif digested_hash == sha3_512:
-
-        hash_type = hashlib.sha3_512()
-
-    elif digested_hash == sha3_256:
-
-        hash_type = hashlib.sha3_256()
-
-    elif digested_hash == sha3_384:
-
-        hash_type = hashlib.sha3_384()
-
-    elif digested_hash == sha3_224:
-
-        hash_type = hashlib.sha3_224()
-
-    elif digested_hash == blake2s:
-
-        hash_type = hashlib.blake2s()
-
-    elif digested_hash == blake2b:
-
-        hash_type = hashlib.blake2b()
         
     try:
         with open(wordlist, 'r') as dictionary:
             for word in dictionary:
                 word = word.strip()
-                hasher = hashlib.new(hash_type) 
+                hasher = hashlib.new(hash_type.name)  
                 hasher.update(word.encode('utf-8'))
                 hashed_value = hasher.hexdigest()
 
