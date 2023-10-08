@@ -1,9 +1,7 @@
-from colorama import Fore
 import colorama
 import pyfiglet
 import hashlib
 import os
-import subprocess
 
 
 
@@ -167,8 +165,8 @@ def hash_generator():
         print('enter exactly hash type next time .')
 
 def hash_cracker():
-    wordlist = input('please input your wordlist path: ')
-    hash_to_crack = input('please input your hash to crack: ')
+    wordlist = input(colorama.Fore.YELLOW+ 'please input your wordlist path: '+colorama.Fore.RESET)
+    hash_to_crack = input(colorama.Fore.YELLOW+'please input your hash to crack: '+colorama.Fore.RESET)
     digested_hash = len(hash_to_crack)/2
 
     md5 = hashlib.md5()
@@ -223,21 +221,21 @@ def hash_cracker():
 
         
     try:
-        with open(wordlist, 'r') as dictionary:
-            for word in dictionary:
+        with open(wordlist, 'r') as wordlist:
+            for word in wordlist:
                 word = word.strip()
-                hasher = hashlib.new(hash_type.name)  
-                hasher.update(word.encode('utf-8'))
-                hashed_value = hasher.hexdigest()
+                generated_hash = hashlib.new(hash_type.name)  
+                generated_hash.update(word.encode('utf-8'))
+                generated_hash = generated_hash.hexdigest()
 
-                if hashed_value == hash_to_crack:
-                    print(f"Original text for hash '{hash_to_crack}' found: {word}")
+                if generated_hash == hash_to_crack:
+                    print(colorama.Fore.GREEN+f"Original text for hash '{hash_to_crack}' found: {word}"+colorama.Fore.RESET)
                     break
             else:
-                print(f"No match found in the dictionary for hash '{hash_to_crack}'")
+                print(colorama.Fore.RED+f"No match found in the dictionary for hash '{hash_to_crack}'"+colorama.Fore.RESET)
 
     except FileNotFoundError:
-        print(f"Dictionary file not found at '{wordlist}'")
+        print(colorama.Fore.RED+f"Dictionary file not found at '{wordlist}'"+colorama.Fore.RESET)
     
 
 
