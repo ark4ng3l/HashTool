@@ -219,7 +219,7 @@ def hash_cracker():
         hash_type = hashlib.sha512()
 
     try:
-        with open(wordlist, 'r') as wordlist:
+        with open(wordlist, 'r', encoding="utf-8", errors="ignore") as wordlist:
             for word in wordlist:
                 word = word.strip()
                 generated_hash = hashlib.new(hash_type.name)
