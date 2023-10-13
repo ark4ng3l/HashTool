@@ -1,3 +1,5 @@
+#Thanks to the teacher & class
+
 import colorama
 import pyfiglet
 import hashlib
@@ -228,9 +230,9 @@ def hash_cracker():
                     print(
                         colorama.Fore.GREEN + f"Original text for hash '{hash_to_crack}' found: {word}" + colorama.Fore.RESET)
                     break
-            else:
-                print(
-                    colorama.Fore.RED + f"No match found in the dictionary for hash '{hash_to_crack}'" + colorama.Fore.RESET)
+                else:
+                    print(
+                        colorama.Fore.RED + f"No match found in the dictionary for hash '{hash_to_crack}'" + colorama.Fore.RESET)
 
     except FileNotFoundError:
         print(colorama.Fore.RED + f"Dictionary file not found at '{wordlist}'" + colorama.Fore.RESET)
