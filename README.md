@@ -4,7 +4,7 @@
 This tool can generate and crack hashes support by hashlib.
 if you like it please give me star ♥ .
 
-new Update comming soon for file integrity :)
+new Update comming soon for file integrity and programm looping:)
 
 
 
