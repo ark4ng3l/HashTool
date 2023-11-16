@@ -30,91 +30,19 @@ def get_user_choice():
         return None
 
 def hash_type_detector():
-    hash = input(colorama.Fore.CYAN + 'please input your hash to detect: ' + colorama.Fore.RESET)
+    hash_value = input(colorama.Fore.CYAN + 'Please input your hash to detect: ' + colorama.Fore.RESET)
+    hash_type = detect_hash_type(hash_value)
 
-    digested_hash = len(hash) / 2
-
-    md5 = hashlib.md5()
-    md5 = md5.digest_size
-    sha1 = hashlib.sha1()
-    sha1 = sha1.digest_size
-    sha224 = hashlib.sha224()
-    sha224 = sha224.digest_size
-    sha256 = hashlib.sha256()
-    sha256 = sha256.digest_size
-    sha384 = hashlib.sha384()
-    sha384 = sha384.digest_size
-    sha512 = hashlib.sha512()
-    sha512 = sha512.digest_size
-    sha3_384 = hashlib.sha3_384()
-    sha3_384 = sha3_384.digest_size
-    sha3_512 = hashlib.sha3_512()
-    sha3_512 = sha3_512.digest_size
-    sha3_256 = hashlib.sha3_256()
-    sha3_256 = sha3_256.digest_size
-    sha3_224 = hashlib.sha3_224()
-    sha3_224 = sha3_224.digest_size
-    blake2s = hashlib.blake2s()
-    blake2s = blake2s.digest_size
-    blake2b = hashlib.blake2b()
-    blake2b = blake2b.digest_size
-
-    if digested_hash == md5:
-        print('digested hash is md5')
-        hash_type = hashlib.md5()
-        return hash_type
-    elif digested_hash == sha1:
-        print('digested hash is sha-1')
-        hash_type = hashlib.sha1()
-        return hash_type
-    elif digested_hash == sha224:
-        print('digested hash is sha-224')
-        hash_type = hashlib.sha224()
-        return hash_type
-    elif digested_hash == sha256:
-        print('digested hash is sha-256')
-        hash_type = hashlib.sha256()
-        return hash_type
-    elif digested_hash == sha384:
-        print('digested hash is sha-384')
-        hash_type = hashlib.sha384()
-        return hash_type
-    elif digested_hash == sha512:
-        print('digested hash is sha-512')
-        hash_type = hashlib.sha512()
-        return hash_type
-    elif digested_hash == sha3_512:
-        print('digested hash is sha3_512')
-        hash_type = hashlib.sha3_512()
-        return hash_type
-    elif digested_hash == sha3_256:
-        print('digested hash is sha3_256')
-        hash_type = hashlib.sha3_256()
-        return hash_type
-    elif digested_hash == sha3_384:
-        print('digested hash is sha3_384')
-        hash_type = hashlib.sha3_384()
-        return hash_type
-    elif digested_hash == sha3_224:
-        print('digested hash is sha3_224')
-        hash_type = hashlib.sha3_224()
-        return hash_type
-    elif digested_hash == blake2s:
-        print('digested hash is blake2s')
-        hash_type = hashlib.blake2s()
-        return hash_type
-    elif digested_hash == blake2b:
-        print('digested hash is blake2b')
-        hash_type = hashlib.blake2b()
-        return hash_type
+    if hash_type is not None:
+        print(f'Detected hash type: {hash_type}')
     else:
-        print('I don not know WHat this hash is :(')
-        hash_type = None
+        print('Unable to detect hash type. Please provide a valid hash.')
 
 def hash_generator():
     user_hash_kind = input(
-        colorama.Fore.YELLOW + f'please select your hash type between=>\n(sha3_512, sha3_256, sha3_224, sha512, sha224, sha1, blake2s, blake2b, sha256, sha384, sha3_384, md5) : ' + colorama.Fore.RESET)
-    user_text = input(colorama.Fore.LIGHTGREEN_EX + 'please input your text to hash : ' + colorama.Fore.RESET)
+        colorama.Fore.YELLOW + f'Please select your hash type between=>\n(sha3_512, sha3_256, sha3_224, sha512, sha224, sha1, blake2s, blake2b, sha256, sha384, sha3_384, md5) : ' + colorama.Fore.RESET)
+    user_text = input(colorama.Fore.LIGHTGREEN_EX + 'Please input your text or file to hash : ' + colorama.Fore.RESET)
+    
     if user_hash_kind == 'sha3_512':
         hash_type = hashlib.sha3_512()
         hash_type.update(user_text.encode())
@@ -164,23 +92,31 @@ def hash_generator():
         hash_type.update(user_text.encode())
         print(hash_type.hexdigest())
     else:
-        print('enter exactly hash type next time .')
+        print('Enter exactly the hash type next time.')
 
 def file_integrity_check():
     file_path = input(colorama.Fore.YELLOW + 'Enter the path of the file: ' + colorama.Fore.RESET)
     hash_algorithm = input(colorama.Fore.YELLOW + 'Enter the hash algorithm (e.g., sha256): ' + colorama.Fore.RESET)
-    
+
     try:
         with open(file_path, 'rb') as file:
-            file_data = file.read()
+            file_data = file.read().decode('utf-8', errors='ignore')
             calculated_hash = hashlib.new(hash_algorithm)
-            calculated_hash.update(file_data)
+            calculated_hash.update(file_data.encode('utf-8', errors='ignore'))
             file_hash = calculated_hash.hexdigest()
 
             print(colorama.Fore.GREEN + f"File Hash: {file_hash}" + colorama.Fore.RESET)
 
     except FileNotFoundError:
         print(colorama.Fore.RED + f"File not found at '{file_path}'" + colorama.Fore.RESET)
+
+def crack_hash(args):
+    word, target_hash, hash_type = args
+    hashed_word = hashlib.new(hash_type)
+    hashed_word.update(word.encode())
+    if hashed_word.hexdigest() == target_hash:
+        return word
+    return None
 
 def hash_cracker():
     hash_to_crack = input(colorama.Fore.YELLOW + 'Please input your hash to crack: ' + colorama.Fore.RESET)
@@ -200,13 +136,14 @@ def hash_cracker():
     pool = multiprocessing.Pool(processes=num_cores)
 
     try:
-        with open(wordlist, 'r') as wordlist_file:
-            words = wordlist_file.readlines()
-            results = pool.map(crack_hash, [(word.strip(), hash_to_crack, hash_type) for word in words])
+        with open(wordlist, 'r', encoding='utf-8', errors='ignore') as wordlist_file:
+            words = [word.strip() for word in wordlist_file.readlines()]
+            print(colorama.Fore.YELLOW + f"Loaded {len(words)} words from the wordlist." + colorama.Fore.RESET)
+            results = pool.map(crack_hash, [(word, hash_to_crack, hash_type) for word in words])
 
             for result in results:
                 if result is not None:
-                    print(colorama.Fore.GREEN + f"Original text for hash '{hash_to_crack}' found: {result}" + colorama.Fore.RESET)
+                    print(colorama.Fore.GREEN + f"Original text for hash '{hash_to_crack}' found: " +colorama.Fore.RED+f'{result}' + colorama.Fore.RESET)
                     break
             else:
                 print(colorama.Fore.RED + f"No match found in the dictionary for hash '{hash_to_crack}'" + colorama.Fore.RESET)
@@ -217,15 +154,6 @@ def hash_cracker():
     finally:
         pool.close()
         pool.join()
-
-def crack_hash(data):
-    word, hash_to_crack, hash_type = data
-    generated_hash = hashlib.new(hash_type)
-    generated_hash.update(word.encode('utf-8', errors="ignore"))
-    generated_hash = generated_hash.hexdigest()
-
-    if generated_hash == hash_to_crack:
-        return word
 
 def detect_hash_type(hash_value):
     hash_length = len(hash_value)
