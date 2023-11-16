@@ -221,7 +221,7 @@ def hash_cracker():
 def crack_hash(data):
     word, hash_to_crack, hash_type = data
     generated_hash = hashlib.new(hash_type)
-    generated_hash.update(word.encode('utf-8'))
+    generated_hash.update(word.encode('utf-8', errors="ignore"))
     generated_hash = generated_hash.hexdigest()
 
     if generated_hash == hash_to_crack:
